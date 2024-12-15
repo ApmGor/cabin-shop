@@ -1,6 +1,6 @@
 import DateSelector from "@/app/_components/DateSelector";
 import ReservationForm from "@/app/_components/ReservationForm";
-import {getBookedDatesByCabinId, getCabin, getSettings} from "@/app/_lib/data-service";
+import {getBookedDatesByCabinId, getSettings} from "@/app/_lib/data-service";
 import {auth} from "@/app/_lib/auth";
 import LoginMessage from "@/app/_components/LoginMessage";
 
