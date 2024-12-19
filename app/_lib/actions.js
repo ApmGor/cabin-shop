@@ -63,9 +63,9 @@ export async function createReservation(bookingData, formData) {
     hasBreakfast: false,
     status: "unconfirmed"
   }
-  console.log(newBooking)
   await createBooking(newBooking);
   revalidatePath(`/cabins/${bookingData.cabinId}`)
+  redirect("/cabins/thankyou");
 }
 
 export async function signInAction() {
