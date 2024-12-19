@@ -1,7 +1,13 @@
 "use server";
 
 import {auth, signIn, signOut} from "@/app/_lib/auth";
-import {deleteBooking, getBookings, updateBooking, updateGuest as upGuest} from "@/app/_lib/data-service";
+import {
+  createBooking,
+  deleteBooking,
+  getBookings,
+  updateBooking,
+  updateGuest as upGuest
+} from "@/app/_lib/data-service";
 import {revalidatePath} from "next/cache";
 import {redirect} from "next/navigation";
 
@@ -41,6 +47,25 @@ export async function updateReservation(formData) {
   await updateBooking(bookingId, updateData);
   revalidatePath(`/account/reservations/edit/${bookingId}`);
   redirect("/account/reservations");
+}
+
+export async function createReservation(bookingData, formData) {
+  const session = await auth();
+  if (!session) throw new Error("You must be logged in");
+  const newBooking = {
+    ...bookingData,
+    guestId: session.user.guestId,
+    numGuests: +formData.get("numGuests"),
+    observations: formData.get("observations").slice(0,1000),
+    extrasPrice: 0,
+    totalPrice: bookingData.cabinPrice,
+    isPaid: false,
+    hasBreakfast: false,
+    status: "unconfirmed"
+  }
+  console.log(newBooking)
+  await createBooking(newBooking);
+  revalidatePath(`/cabins/${bookingData.cabinId}`)
 }
 
 export async function signInAction() {

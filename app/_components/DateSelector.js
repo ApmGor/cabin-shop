@@ -7,8 +7,8 @@ import {useReservation} from "@/app/_components/ReservationContext";
 
 function isAlreadyBooked(range, datesArr) {
   return (
-    range.from &&
-    range.to &&
+    range?.from &&
+    range?.to &&
     datesArr.some((date) =>
       isWithinInterval(date, { start: range.from, end: range.to })
     )
@@ -22,10 +22,12 @@ function DateSelector({settings,cabin,bookedDates}) {
   const numNights = differenceInDays(displayedRange?.to, displayedRange?.from);
   const cabinPrice = numNights*(regularPrice-discount);
   const {minBookingLength, maxBookingLength} = settings;
+  const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
   return (
     <div className="flex flex-col justify-between">
       <DayPicker
+        timeZone={timeZone}
         className="pt-12 place-self-center"
         mode="range"
         onSelect={setRange}
